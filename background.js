@@ -1,18 +1,17 @@
 // background.js
-chrome.runtime.onInstalled.addListener(({ reason }) => {
+chrome.runtime.onInstalled.addListener(async ({ reason }) => {
     if (reason === 'install') {
-        chrome.storage.local.set({
-            hosts: [],
-        });
+        await fetchData()
     }
 });
 
 const fetchData = async () => {
+    console.log('fetching data')
     try {
         const response = await fetch('https://odc24.rbc-group.uz/api/hosts/?format=json');
         const hosts = await response.json();
 
-        chrome.storage.local.set(hosts);
+        chrome.storage.local.set({hosts});
     } catch (e) {
         console.log('Cant fetch hosts')
     }
